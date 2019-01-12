@@ -15,19 +15,19 @@ import com.bankapp.app.mapper.SavingsAccountMapper;
 @Primary
 public class SavingsAccountJDBCDAO implements SavingsAccountDAO  {
 	@Autowired
-	private JdbcTemplate jdbctemplate;
+	private JdbcTemplate jdbcTemplate;
 	
 	@Override
 	public SavingsAccount createNewAccount(SavingsAccount account)
 	{
-		jdbctemplate.update("INSERT INTO ACCOUNT VALUES (?,?,?,?,?,?)",new Object[] {account.getBankAccount().getAccountNumber(),account.getBankAccount().getAccountHolderName(),account.getBankAccount().getAccountBalance(),account.isSalary(),null,"SA"});
+		jdbcTemplate.update("INSERT INTO ACCOUNT VALUES (?,?,?,?,?,?)",new Object[] {account.getBankAccount().getAccountNumber(),account.getBankAccount().getAccountHolderName(),account.getBankAccount().getAccountBalance(),account.isSalary(),null,"SA"});
 		return account;
 		
 	}
 
 	@Override
 	public SavingsAccount updateAccount(SavingsAccount savingsAccount) throws ClassNotFoundException, SQLException {
-		jdbctemplate.update("UPDATE ACCOUNT SET account_hn=? ,salary=? where account_id=?",
+		jdbcTemplate.update("UPDATE ACCOUNT SET account_hn=? ,salary=? where account_id=?",
 				new Object[] { savingsAccount.getBankAccount().getAccountHolderName(), savingsAccount.salary,savingsAccount.getBankAccount().getAccountNumber() });
 		return null;
 	}
@@ -35,25 +35,25 @@ public class SavingsAccountJDBCDAO implements SavingsAccountDAO  {
 	@Override
 	public SavingsAccount getAccountById(int accountNumber)
 			throws ClassNotFoundException, SQLException, AccountNotFoundException {
-		return jdbctemplate.queryForObject("SELECT * FROM account where account_id=?", new Object[] { accountNumber },
+		return jdbcTemplate.queryForObject("SELECT * FROM account where account_id=?", new Object[] { accountNumber },
 				new SavingsAccountMapper());
 		
 	}
 
 	@Override
 	public SavingsAccount deleteAccount(int accountNumber) throws ClassNotFoundException, SQLException {
-		jdbctemplate.update("DELETE FROM account WHERE account_id=?", new Object[] { accountNumber });
+		jdbcTemplate.update("DELETE FROM account WHERE account_id=?", new Object[] { accountNumber });
 		return null;
 	}
 
 	@Override
 	public List<SavingsAccount> getAllSavingsAccount() throws ClassNotFoundException, SQLException {
-		return jdbctemplate.query("SELECT * FROM ACCOUNT", new SavingsAccountMapper());
+		return jdbcTemplate.query("SELECT * FROM ACCOUNT", new SavingsAccountMapper());
 	}
 
 	@Override
 	public void updateBalance(int accountNumber, double currentBalance) throws ClassNotFoundException, SQLException {
-		jdbctemplate.update("UPDATE ACCOUNT SET account_bal=? where account_id=?",
+		jdbcTemplate.update("UPDATE ACCOUNT SET account_bal=? where account_id=?",
 				new Object[] { currentBalance, accountNumber });		
 	}
 
@@ -65,14 +65,14 @@ public class SavingsAccountJDBCDAO implements SavingsAccountDAO  {
 
 	@Override
 	public List<SavingsAccount> getAllAccountsSortedByNames() throws ClassNotFoundException, SQLException {
-		return jdbctemplate.query("SELECT * FROM ACCOUNT ORDER BY account_hn", new SavingsAccountMapper());
+		return jdbcTemplate.query("SELECT * FROM ACCOUNT ORDER BY account_hn", new SavingsAccountMapper());
 		
 	}
 
 	@Override
 	public List<SavingsAccount> getAllSavingsAccountsSortedByRange(double minimum, double maximum)
 			throws ClassNotFoundException, SQLException {
-		return jdbctemplate.query("SELECT * FROM ACCOUNT WHERE account_bal BETWEEN ? AND ?;", new Object[] {minimum,maximum},new SavingsAccountMapper());
+		return jdbcTemplate.query("SELECT * FROM ACCOUNT WHERE account_bal BETWEEN ? AND ?;", new Object[] {minimum,maximum},new SavingsAccountMapper());
 	}
 	
 

@@ -38,8 +38,8 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 	public SavingsAccount createNewAccount(String accountHolderName, double accountBalance, boolean salary)
 			throws ClassNotFoundException, SQLException {
 		SavingsAccount account = factory.createNewSavingsAccount(accountHolderName, accountBalance, salary);
-		savingsAccountDAO.createNewAccount(account);
-		return null;
+		return savingsAccountDAO.createNewAccount(account);
+		
 	}
 
 	@Override

@@ -2,8 +2,12 @@ package com.bankapp.app.account;
 
 public class SavingsAccount {
 	public boolean salary;
-	private BankAccount bankAccount;
-
+	public BankAccount bankAccount;
+	
+	public SavingsAccount()
+	{
+		
+	}
 	public SavingsAccount(String accountHolderName, double accountBalance, boolean salary) {
 		bankAccount = new BankAccount(accountHolderName, accountBalance);
 		this.salary = salary;
