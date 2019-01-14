@@ -29,6 +29,10 @@ public class MainController {
 	@Autowired
 	private SavingsAccountService savingsAccountService;
 	
+	@Autowired
+	BankValidator validation;
+
+	
 	public void setSavingsAccountService(SavingsAccountService savingsAccountService)
 	{
 		this.savingsAccountService=savingsAccountService;
@@ -52,23 +56,21 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/addnewaccount",method=RequestMethod.POST)
-	public RedirectView save(@RequestParam("bankAccount.accountHolderName") String accountHolderName,
+	public String save(@RequestParam("bankAccount.accountHolderName") String accountHolderName,
 			@RequestParam("bankAccount.accountBalance")double accountBalance,@RequestParam("salary") String salary1,Model model,
-			@ModelAttribute("savingsaccount") SavingsAccount savingsaccount,BindingResult result) throws ClassNotFoundException, SQLException
+			@ModelAttribute("savingsaccount")SavingsAccount savingsaccount,BindingResult result) throws ClassNotFoundException, SQLException
 	{
 		
 		boolean salary=salary1.equalsIgnoreCase("y")?true:false;
-		System.out.println(accountHolderName);
-		System.out.println(accountBalance);
-		System.out.println(salary);
-		savingsAccountService.createNewAccount(accountHolderName, accountBalance, salary);
-		/*if(result.hasErrors())
+		
+		validation.validate(savingsaccount,result);
+		if(result.hasErrors())
 		{
 			return "addnewaccount";
 		}
-		*/
 		
-		return new RedirectView("getaccounts");
+		savingsAccountService.createNewAccount(accountHolderName, accountBalance, salary);
+		return "getaccount";
 	}
 	
 	
@@ -176,7 +178,40 @@ public class MainController {
 		return new RedirectView("getaccounts");		
 	}
 	
+	@RequestMapping("/deposit")
+	public String deposit(Model model)
+	{
+		
+		return "depositform";
+		
+	}
 	
+	@RequestMapping("/depositaction")
+	public RedirectView depositAction(@RequestParam("accountNumber")int accNum,@RequestParam("amount")double amount,Model model) throws ClassNotFoundException, SQLException, AccountNotFoundException
+	{
+		
+		SavingsAccount savingsAccount = savingsAccountService.getAccountById(accNum);
+		savingsAccountService.deposit(savingsAccount, amount);
+		
+		return new RedirectView("getaccount");		
+	}
+	
+	@RequestMapping("/withdraw")
+	public String withdraw(Model model)
+	{
+		
+		return "withdrawform";
+		
+	}
+	
+	@RequestMapping("/withdrawaction")
+	public RedirectView withdrawAction(@RequestParam("accountNumber")int accNum,@RequestParam("amount")double amount,Model model) throws ClassNotFoundException, SQLException, AccountNotFoundException
+	{
+		
+		SavingsAccount savingsAccount = savingsAccountService.getAccountById(accNum);
+		savingsAccountService.withdraw(savingsAccount, amount);
+		return new RedirectView("getaccount");		
+	}
 	
 	@RequestMapping("/sortByName")
 	public String sortByName(Model model)
@@ -233,7 +268,7 @@ public class MainController {
 			accountSet = new TreeSet<>(new Comparator<SavingsAccount>() {
 				@Override
 				public int compare(SavingsAccount arg0, SavingsAccount arg1) {
-					return Integer.compare(arg0.getBankAccount().getAccountBalance(), arg1.getBankAccount().getAccountBalance());
+					return Double.compare(arg0.getBankAccount().getAccountBalance(), arg1.getBankAccount().getAccountBalance());
 				}
 			});
 			counter = false;
@@ -299,5 +334,7 @@ public class MainController {
 		}
 		return ("getaccounts");
 	}
+	
+	
 	
 }

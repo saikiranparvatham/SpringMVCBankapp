@@ -11,10 +11,11 @@
 <form:form action="addnewaccount" method="post" modelAttribute="savingsaccount"  >
 <table>
 <tr><td><label>Enter Account Holder Name</label></td>
-<td><form:input path="bankAccount.accountHolderName"/></td></tr>
+<td><form:input path="bankAccount.accountHolderName"/><form:errors path="bankAccount.accountHolderName" cssClass="errors"/></td></tr>
 
 <tr><td><label>Enter Initial Balance</label></td>
-<td><form:input path="bankAccount.accountBalance"/></td></tr>
+<td><form:input path="bankAccount.accountBalance"/></td>
+<td><form:errors path="bankAccount.accountBalance" cssClass="errors"/></td></tr>
 
 <tr><td>
 Select whether salaried or not</td>

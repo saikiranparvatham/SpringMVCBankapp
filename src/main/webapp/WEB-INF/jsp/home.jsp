@@ -15,10 +15,10 @@
 <li><a href = "close">Close Account </a></li>
 <li><a href = "search">Update Account</a></li>
 <li><a href = "search2">Search Account</a></li>
-<li><a href = "/withdrawAccountl">Withdraw</a></li>
-<li><a href = "/depositAccount">Deposit</a></li>
+<li><a href = "withdraw">Withdraw</a></li>
+<li><a href = "deposit">Deposit</a></li>
 <li><a href = "fundtransfer">Fund Transfer</a></li>
-<li><a href = "/checkBalance">Check current Balance</a></li>
+<li><a href = "search">Check current Balance</a></li>
 <li><a href = "getaccounts">Get all savings account details </a></li>
 
 
